@@ -1,5 +1,9 @@
 package com.example.ktordemo.presentation.viewmodel
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ktordemo.data.model.Post
@@ -10,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 
 class ViewModel(private val useCase: UseCase = UseCase()) : ViewModel() {
 
@@ -78,5 +83,31 @@ class ViewModel(private val useCase: UseCase = UseCase()) : ViewModel() {
         viewModelScope.launch {
             useCase.getComments(1)
         }
+    }
+
+    fun uploadImage(context: Context, drawableId: Int) {
+        val imageData = drawableToByteArray(context, drawableId)
+        viewModelScope.launch {
+            useCase.uploadImage(
+                byteArray = imageData.first,
+                fileName = imageData.second,
+                fileType = imageData.third,
+                "file"
+            )
+        }
+    }
+
+    private fun drawableToByteArray(
+        context: Context,
+        drawableId: Int
+    ): Triple<ByteArray, String, String> {
+        val drawable: Drawable = context.getDrawable(drawableId)!!
+        val bitmap = (drawable as BitmapDrawable).bitmap
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val byteArray = stream.toByteArray()
+        val fileName = context.resources.getResourceEntryName(drawableId) + ".png"
+        val fileType = "image/png"
+        return Triple(byteArray, fileName, fileType)
     }
 }

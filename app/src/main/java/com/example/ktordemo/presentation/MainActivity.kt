@@ -19,7 +19,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.ktordemo.R
 import com.example.ktordemo.data.model.Post
 import com.example.ktordemo.presentation.theme.KTorDemoTheme
 import com.example.ktordemo.presentation.viewmodel.ViewModel
@@ -32,6 +34,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             KTorDemoTheme {
                 val viewModel = ViewModel()
+                viewModel.uploadImage(LocalContext.current, R.drawable.dummy)
                 MainContent(viewModel)
             }
         }

@@ -28,4 +28,12 @@ class UseCase(private val repository: Repository = RepositoryImpl()) {
         repository.getComments(id)
     }
 
+    suspend fun uploadImage(
+        byteArray: ByteArray,
+        fileName: String,
+        fileType: String,
+        fieldName: String
+    ) {
+        repository.uploadImage(byteArray, fileName, fileType, fieldName)
+    }
 }

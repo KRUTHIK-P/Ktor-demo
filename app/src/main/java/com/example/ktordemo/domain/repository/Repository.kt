@@ -17,4 +17,11 @@ interface Repository {
     suspend fun delete(id: Int)
 
     suspend fun getComments(id: Int)
+
+    suspend fun uploadImage(
+        byteArray: ByteArray,
+        fileName: String,
+        fileType: String,
+        fieldName: String
+    )
 }
